@@ -1,6 +1,9 @@
-// import PropTypes from 'prop-types';
 import React from 'react';
-import { Box, Section, Title, Button, Option } from './Feedback.styled';
+import { Box } from './Feedback.styled';
+import Statistics from './Statistics';
+import FeedbackOptions from './FeedbackOptions';
+import Section from './Section';
+import Notification from './Notification';
 
 class Feedback extends React.Component {
   state = {
@@ -12,7 +15,7 @@ class Feedback extends React.Component {
   handleGoodFeedback = () => {
     this.setState(
       prevState => ({
-        good: (prevState.good += 1),
+        good: prevState.good + 1,
       }),
       this.countTotalFeedback
     );
@@ -20,7 +23,7 @@ class Feedback extends React.Component {
   handleNeutralFeedback = () => {
     this.setState(
       prevState => ({
-        neutral: (prevState.neutral += 1),
+        neutral: prevState.neutral + 1,
       }),
       this.countTotalFeedback
     );
@@ -28,7 +31,7 @@ class Feedback extends React.Component {
   handleBadFeedback = () => {
     this.setState(
       prevState => ({
-        bad: (prevState.bad += 1),
+        bad: prevState.bad + 1,
       }),
       this.countTotalFeedback
     );
@@ -50,26 +53,31 @@ class Feedback extends React.Component {
     const { good, neutral, bad, total } = this.state;
     return (
       <Box>
-        <Section className="feedbackOptions">
-          <Title>Please leave feedback</Title>
-          <Button onClick={this.handleGoodFeedback}>Good</Button>
-          <Button onClick={this.handleNeutralFeedback}>Neutral</Button>
-          <Button onClick={this.handleBadFeedback}>Bad</Button>
+        <Section title="FeedbackOptions">
+          <FeedbackOptions
+            options={{ good, neutral, bad }}
+            onLeaveFeedback={{
+              handleGoodFeedback: this.handleGoodFeedback,
+              handleNeutralFeedback: this.handleNeutralFeedback,
+              handleBadFeedback: this.handleBadFeedback,
+            }}
+          />
         </Section>
-        <Section className="feedbackStatistics">
-          <Title>Statistics</Title>
-          <Option>Good: {good} </Option>
-          <Option>Neutral: {neutral}</Option>
-          <Option>Bad: {bad}</Option>
-          <Option>Total: {total}</Option>
-          <Option>
-            Positive feedback: {this.countPositiveFeedbackPercentage()}%
-          </Option>
+        <Section title="Statistics">
+          {this.state.total === 0 ? (
+            <Notification message="There is no feedback" />
+          ) : (
+            <Statistics
+              good={good}
+              neutral={neutral}
+              bad={bad}
+              total={total}
+              countPositiveFeedbackPercentage={this.countPositiveFeedbackPercentage()}
+            />
+          )}
         </Section>
       </Box>
     );
   }
 }
 export default Feedback;
-
-// Feedback.propTypes = {};
