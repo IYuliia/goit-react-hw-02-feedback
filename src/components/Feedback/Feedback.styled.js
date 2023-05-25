@@ -19,6 +19,7 @@ export const Title = styled.h2`
 
 export const Button = styled.button`
   font-size: 20px;
+  text-transform: capitalize;
   margin-right: 20px;
   border-radius: 4px;
   border: 1px solid lightgrey;

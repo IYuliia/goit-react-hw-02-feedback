@@ -2,14 +2,17 @@ import React from 'react';
 import { Button } from './Feedback.styled';
 
 const FeedbackOptions = ({ options, onLeaveFeedback }) => {
-  //   const { good, neutral, bad } = options;
-  const { handleGoodFeedback, handleNeutralFeedback, handleBadFeedback } =
-    onLeaveFeedback;
+  const handleFeedback = name => {
+    onLeaveFeedback.handleFeedback(name);
+  };
+
   return (
     <>
-      <Button onClick={handleGoodFeedback}>Good</Button>
-      <Button onClick={handleNeutralFeedback}>Neutral</Button>
-      <Button onClick={handleBadFeedback}>Bad</Button>
+      {options.map(name => (
+        <Button key={name} onClick={() => handleFeedback(name)}>
+          {name}
+        </Button>
+      ))}
     </>
   );
 };

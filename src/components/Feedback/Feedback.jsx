@@ -10,39 +10,26 @@ class Feedback extends React.Component {
     good: 0,
     neutral: 0,
     bad: 0,
-    total: 0,
   };
-  handleGoodFeedback = () => {
+
+  handleFeedback = name => {
     this.setState(
       prevState => ({
-        good: prevState.good + 1,
+        [name]: prevState[name] + 1,
       }),
       this.countTotalFeedback
     );
   };
-  handleNeutralFeedback = () => {
-    this.setState(
-      prevState => ({
-        neutral: prevState.neutral + 1,
-      }),
-      this.countTotalFeedback
-    );
-  };
-  handleBadFeedback = () => {
-    this.setState(
-      prevState => ({
-        bad: prevState.bad + 1,
-      }),
-      this.countTotalFeedback
-    );
-  };
+
   countTotalFeedback = () => {
     const { good, neutral, bad } = this.state;
     const total = good + neutral + bad;
-    this.setState({ total });
+    return total;
   };
+
   countPositiveFeedbackPercentage = () => {
-    const { good, total } = this.state;
+    const { good } = this.state;
+    const total = this.countTotalFeedback();
     if (total === 0) {
       return 0;
     }
@@ -50,21 +37,21 @@ class Feedback extends React.Component {
   };
 
   render() {
-    const { good, neutral, bad, total } = this.state;
+    const { good, neutral, bad } = this.state;
+    const total = this.countTotalFeedback();
+
     return (
       <Box>
         <Section title="FeedbackOptions">
           <FeedbackOptions
-            options={{ good, neutral, bad }}
+            options={Object.keys(this.state)}
             onLeaveFeedback={{
-              handleGoodFeedback: this.handleGoodFeedback,
-              handleNeutralFeedback: this.handleNeutralFeedback,
-              handleBadFeedback: this.handleBadFeedback,
+              handleFeedback: this.handleFeedback,
             }}
           />
         </Section>
         <Section title="Statistics">
-          {this.state.total === 0 ? (
+          {total === 0 ? (
             <Notification message="There is no feedback" />
           ) : (
             <Statistics
